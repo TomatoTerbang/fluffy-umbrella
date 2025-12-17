@@ -22,8 +22,3 @@ if (Test-Path -Path $Folder) {
 }
     echo "[3] Finally, invoking eventvwr"
     eventvwr
-}
-else {
-    echo '[-] Usage: Invoke-EventViewer commandhere'
-    echo 'Example: Invoke-EventViewer cmd.exe'
-}
